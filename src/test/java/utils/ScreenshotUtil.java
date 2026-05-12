@@ -2,6 +2,7 @@ package utils;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import org.openqa.selenium.OutputType;
@@ -9,36 +10,60 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 
+
 public class ScreenshotUtil {
 
 
-    public static String capture(
+
+    public static void capture(
+
             WebDriver driver,
+
             String testName
+
     ) throws Exception {
 
 
-        File src =
+
+        // create folder
+
+
+        Files.createDirectories(
+
+                Paths.get(
+
+                        "screenshots"
+                )
+        );
+
+
+
+
+        File source =
+
                 ((TakesScreenshot)driver)
+
                         .getScreenshotAs(
+
                                 OutputType.FILE
                         );
 
 
-        String path =
-                "screenshots/"
-                        + testName
-                        + ".png";
 
 
         Files.copy(
-                src.toPath(),
-                new File(path).toPath(),
+
+                source.toPath(),
+
+                Paths.get(
+
+                        "screenshots/"
+                                + testName
+                                + ".png"
+                ),
+
                 StandardCopyOption.REPLACE_EXISTING
         );
-
-
-        return path;
     }
 
 }

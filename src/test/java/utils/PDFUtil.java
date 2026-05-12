@@ -1,7 +1,11 @@
 package utils;
 
 import java.io.File;
+
 import java.time.LocalDateTime;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -11,7 +15,9 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 
+
 public class PDFUtil {
+
 
 
     public static void create(
@@ -23,12 +29,31 @@ public class PDFUtil {
     ) throws Exception {
 
 
+
+        // create folder automatically
+
+
+        Files.createDirectories(
+
+                Paths.get(
+
+                        "reports"
+                )
+        );
+
+
+
+
         PDDocument document =
                 new PDDocument();
 
 
+
+
         PDPage page =
                 new PDPage();
+
+
 
 
         document.addPage(
@@ -37,17 +62,22 @@ public class PDFUtil {
 
 
 
+
         PDPageContentStream content =
 
                 new PDPageContentStream(
 
                         document,
+
                         page
                 );
 
 
 
+
         content.beginText();
+
+
 
 
         content.setFont(
@@ -56,6 +86,8 @@ public class PDFUtil {
 
                 14
         );
+
+
 
 
         content.newLineAtOffset(
@@ -67,10 +99,13 @@ public class PDFUtil {
 
 
 
+
         content.showText(
 
                 "Automation Test Report"
         );
+
+
 
 
         content.newLineAtOffset(
@@ -81,10 +116,14 @@ public class PDFUtil {
         );
 
 
+
+
         content.showText(
 
                 "Website: https://www.link3.net/"
         );
+
+
 
 
         content.newLineAtOffset(
@@ -93,6 +132,8 @@ public class PDFUtil {
 
                 -30
         );
+
+
 
 
         content.showText(
@@ -101,12 +142,16 @@ public class PDFUtil {
         );
 
 
+
+
         content.newLineAtOffset(
 
                 0,
 
                 -30
         );
+
+
 
 
         content.showText(
@@ -115,12 +160,16 @@ public class PDFUtil {
         );
 
 
+
+
         content.newLineAtOffset(
 
                 0,
 
                 -30
         );
+
+
 
 
         content.showText(
@@ -131,10 +180,14 @@ public class PDFUtil {
 
 
 
+
         content.endText();
 
 
+
+
         content.close();
+
 
 
 
@@ -147,6 +200,8 @@ public class PDFUtil {
                                 + ".pdf"
                 )
         );
+
+
 
 
         document.close();

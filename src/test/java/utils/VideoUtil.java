@@ -1,7 +1,11 @@
 package utils;
 
 import java.awt.*;
+
 import java.io.File;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.monte.media.Format;
 import org.monte.media.math.Rational;
@@ -93,7 +97,6 @@ public class VideoUtil
 
     ) {
 
-
         return new File(
 
                 "videos/" + testName + ".avi"
@@ -112,17 +115,26 @@ public class VideoUtil
 
 
 
-        File folder =
+        Files.createDirectories(
 
-                new File("videos");
+                Paths.get(
 
+                        "videos"
+                )
+        );
+
+
+
+
+        // Skip video recording in headless CI
 
 
         if(
-                !folder.exists()
+
+                GraphicsEnvironment.isHeadless()
         ){
 
-            folder.mkdir();
+            return;
         }
 
 

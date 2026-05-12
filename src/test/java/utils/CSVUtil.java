@@ -5,6 +5,9 @@ import java.io.FileWriter;
 
 import java.time.LocalDateTime;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 
 
 public class CSVUtil {
@@ -12,8 +15,6 @@ public class CSVUtil {
 
 
     private static int count = 0;
-
-    private static boolean firstRun = true;
 
 
 
@@ -29,21 +30,32 @@ public class CSVUtil {
 
 
 
-        File folder =
+        // create folder automatically
+
+
+        Files.createDirectories(
+
+                Paths.get(
+
+                        "reports"
+                )
+        );
+
+
+
+
+        File csvFile =
 
                 new File(
-                        "reports"
+
+                        "reports/TestReport.csv"
                 );
 
 
 
-        if(
 
-                !folder.exists()
-        ) {
-
-            folder.mkdir();
-        }
+        boolean fileExists =
+                csvFile.exists();
 
 
 
@@ -52,28 +64,25 @@ public class CSVUtil {
 
                 new FileWriter(
 
-                        "reports/TestReport.csv",
+                        csvFile,
 
                         true
-        );
+                );
 
 
+
+
+        // write header only first time
 
 
         if(
-
-                firstRun
-        ) {
-
+                !fileExists
+        ){
 
             writer.write(
 
                     "Test No,Test Name,Status,Execution Time\n"
             );
-
-
-
-            firstRun = false;
         }
 
 
@@ -88,33 +97,33 @@ public class CSVUtil {
 
                 count
 
-                +
+                        +
 
-                ","
+                        ","
 
-                +
+                        +
 
-                testName
+                        testName
 
-                +
+                        +
 
-                ","
+                        ","
 
-                +
+                        +
 
-                status
+                        status
 
-                +
+                        +
 
-                ","
+                        ","
 
-                +
+                        +
 
-                LocalDateTime.now()
+                        LocalDateTime.now()
 
-                +
+                        +
 
-                "\n"
+                        "\n"
         );
 
 
