@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Link3 Dashboard</title>
+
+    <style>
+
+        body{
+            font-family:Arial;
+            background:#f5f7fa;
+            padding:30px;
+        }
+
+        .cards{
+            display:flex;
+            gap:20px;
+            margin-bottom:30px;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            width:200px;
+            border-radius:10px;
+        }
+
+        table{
+            width:100%;
+            background:white;
+            border-collapse:collapse;
+        }
+
+        th,td{
+            padding:15px;
+            border-bottom:1px solid #ddd;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<h1>Link3 Automation Dashboard</h1>
+
+
+
+<div class="cards">
+
+    <div class="card">
+
+        Total:
+        <h2 id="total">0</h2>
+
+    </div>
+
+
+    <div class="card">
+
+        Passed:
+        <h2 id="passed">0</h2>
+
+    </div>
+
+
+    <div class="card">
+
+        Failed:
+        <h2 id="failed">0</h2>
+
+    </div>
+
+
+    <div class="card">
+
+        Success:
+        <h2 id="rate">0%</h2>
+
+    </div>
+
+</div>
+
+
+
+
+<table>
+
+    <thead>
+
+    <tr>
+
+        <th>Test</th>
+        <th>Status</th>
+
+    </tr>
+
+    </thead>
+
+
+    <tbody id="body">
+
+    </tbody>
+
+</table>
+
+
+
+
+<script>
+
+
+fetch(
+    "../target/test-output/testng-results.xml"
+)
+
+.then(
+    response => response.text()
+)
+
+.then(
+
+    xmlText=>{
+
+
+        const parser =
+                new DOMParser();
+
+
+        const xml =
+
+                parser.parseFromString(
+
+                        xmlText,
+
+                        "text/xml"
+                );
+
+
+
+        const methods =
+
+                xml.querySelectorAll(
+
+                        "test-method"
+                );
+
+
+
+        let passed = 0;
+        let failed = 0;
+
+
+
+        methods.forEach(
+
+
+            test=>{
+
+
+                const name =
+
+                        test.getAttribute(
+
+                                "name"
+                        );
+
+
+
+                const status =
+
+                        test.getAttribute(
+
+                                "status"
+                        );
+
+
+
+                if(
+                    status==="PASS"
+                )
+                    passed++;
+
+                else
+                    failed++;
+
+
+
+
+                document
+                    .getElementById(
+                        "body"
+                    )
+
+                    .innerHTML +=
+
+                    `
+
+                    <tr>
+
+                        <td>${name}</td>
+
+                        <td>${status}</td>
+
+                    </tr>
+
+                    `;
+            }
+        );
+
+
+
+
+        const total =
+                passed+failed;
+
+
+
+        const rate =
+
+                Math.round(
+
+                        (passed/total)*100
+                );
+
+
+
+
+        document
+            .getElementById(
+                "total"
+            ).innerText = total;
+
+
+
+        document
+            .getElementById(
+                "passed"
+            ).innerText = passed;
+
+
+
+        document
+            .getElementById(
+                "failed"
+            ).innerText = failed;
+
+
+
+        document
+            .getElementById(
+                "rate"
+            ).innerText = rate+"%";
+
+    }
+
+);
+
+
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="Link3 Suite">
+
+    <test name="Smoke Tests">
+
+        <classes>
+
+            <class name="tests.HomeTest"/>
+
+        </classes>
+
+    </test>
+
+</suite>

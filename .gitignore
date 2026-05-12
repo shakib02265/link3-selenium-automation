@@ -1,0 +1,9 @@
+target/
+reports/
+screenshots/
+videos/
+allure-results/
+allure-report/
+.vscode/
+.idea/
+*.log
