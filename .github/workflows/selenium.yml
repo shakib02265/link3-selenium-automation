@@ -32,11 +32,6 @@ jobs:
 
 
 
-      - name: Setup Chrome
-        uses: browser-actions/setup-chrome@v1
-
-
-
       - name: Cache Maven
         uses: actions/cache@v4
 
@@ -52,6 +47,7 @@ jobs:
 
 
       - name: Upload screenshots
+        if: always()
         uses: actions/upload-artifact@v4
 
         with:
@@ -61,6 +57,7 @@ jobs:
 
 
       - name: Upload videos
+        if: always()
         uses: actions/upload-artifact@v4
 
         with:
@@ -70,6 +67,7 @@ jobs:
 
 
       - name: Upload reports
+        if: always()
         uses: actions/upload-artifact@v4
 
         with:
@@ -79,6 +77,7 @@ jobs:
 
 
       - name: Upload Allure Results
+        if: always()
         uses: actions/upload-artifact@v4
 
         with:

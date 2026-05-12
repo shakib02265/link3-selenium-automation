@@ -1,15 +1,19 @@
 package base;
 
 import java.lang.reflect.Method;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import java.time.Duration;
 
 import org.openqa.selenium.WebDriver;
+
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import org.testng.ITestResult;
+
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -19,9 +23,13 @@ import io.qameta.allure.Allure;
 
 import utils.PDFUtil;
 import utils.HTMLUtil;
+
 import utils.DashboardWriter;
+
 import utils.ScreenshotUtil;
+
 import utils.CSVUtil;
+
 import utils.VideoUtil;
 
 
@@ -44,8 +52,16 @@ public class BaseTest {
 
 
 
+
+        // auto detect browser version
+
+
         WebDriverManager
+
                 .chromedriver()
+
+                .browserVersionDetection()
+
                 .setup();
 
 
@@ -57,9 +73,16 @@ public class BaseTest {
 
 
 
+        // CI safe options
+
+
         options.addArguments(
 
-                "--remote-allow-origins=*"
+                "--remote-allow-origins=*",
+
+                "--disable-dev-shm-usage",
+
+                "--no-sandbox"
         );
 
 
@@ -75,7 +98,9 @@ public class BaseTest {
 
 
         driver.manage()
+
                 .timeouts()
+
                 .implicitlyWait(
 
                         Duration.ofSeconds(10)
@@ -85,10 +110,15 @@ public class BaseTest {
 
 
         driver.manage()
+
                 .window()
+
                 .maximize();
 
 
+
+
+        // start video
 
 
         VideoUtil.startRecord(
@@ -125,6 +155,7 @@ public class BaseTest {
 
 
         String status =
+
                 result.isSuccess()
 
                         ?
@@ -138,17 +169,25 @@ public class BaseTest {
 
 
 
-        // create files
+        // screenshot
 
 
-        ScreenshotUtil.capture(
+        if(
+                driver != null
+        ){
 
-                driver,
+            ScreenshotUtil.capture(
 
-                testName
-        );
+                    driver,
+
+                    testName
+            );
+        }
 
 
+
+
+        // reports
 
 
         PDFUtil.create(
@@ -189,13 +228,15 @@ public class BaseTest {
 
 
 
+        // stop video
+
+
         VideoUtil.stopRecord();
 
 
 
 
-        // IMPORTANT:
-        // add test name
+        // allure step
 
 
         Allure.step(
@@ -206,7 +247,7 @@ public class BaseTest {
 
 
 
-        // screenshot
+        // screenshot attachment
 
 
         try {
@@ -233,7 +274,7 @@ public class BaseTest {
 
 
 
-        // video
+        // video attachment
 
 
         try {
@@ -260,7 +301,7 @@ public class BaseTest {
 
 
 
-        // pdf
+        // pdf attachment
 
 
         try {
@@ -285,6 +326,9 @@ public class BaseTest {
         } catch(Exception e){}
 
 
+
+
+        // close browser safely
 
 
         if(
