@@ -1,6 +1,8 @@
 package base;
 
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Duration;
 
 import org.openqa.selenium.WebDriver;
@@ -12,6 +14,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+
+import io.qameta.allure.Allure;
 
 import utils.PDFUtil;
 import utils.HTMLUtil;
@@ -37,7 +41,6 @@ public class BaseTest {
             Method method
 
     ) throws Exception {
-
 
 
 
@@ -88,9 +91,6 @@ public class BaseTest {
 
 
 
-        // video name = test method name
-
-
         VideoUtil.startRecord(
 
                 method.getName()
@@ -99,20 +99,9 @@ public class BaseTest {
 
 
 
-        // open Link3
-
-
         driver.get(
 
                 "https://www.link3.net/"
-        );
-
-
-
-
-        System.out.println(
-
-                "Website opened."
         );
     }
 
@@ -130,14 +119,12 @@ public class BaseTest {
 
 
         String testName =
-
                 result.getName();
 
 
 
 
         String status =
-
                 result.isSuccess()
 
                         ?
@@ -151,108 +138,153 @@ public class BaseTest {
 
 
 
+        // create files
+
+
+        ScreenshotUtil.capture(
+
+                driver,
+
+                testName
+        );
+
+
+
+
+        PDFUtil.create(
+
+                testName,
+
+                status
+        );
+
+
+
+
+        HTMLUtil.create(
+
+                testName,
+
+                status
+        );
+
+
+
+
+        CSVUtil.create(
+
+                testName,
+
+                status
+        );
+
+
+
+
+        DashboardWriter.addResult(
+
+                result.isSuccess()
+        );
+
+
+
+
+        VideoUtil.stopRecord();
+
+
+
+
+        // IMPORTANT:
+        // add test name
+
+
+        Allure.step(
+
+                "Running test: " + testName
+        );
+
+
+
+
+        // screenshot
+
+
         try {
 
 
+            Allure.addAttachment(
 
-            // screenshot
+                    "Screenshot",
 
+                    Files.newInputStream(
 
-            if(
-                    driver != null
-            ){
+                            Paths.get(
 
-                ScreenshotUtil.capture(
-
-                        driver,
-
-                        testName
-                );
-            }
-
-
-
-
-            // pdf
-
-
-            PDFUtil.create(
-
-                    testName,
-
-                    status
+                                    "screenshots/"
+                                            + testName
+                                            + ".png"
+                            )
+                    )
             );
 
 
+        } catch(Exception e){}
 
 
-            // html
 
 
-            HTMLUtil.create(
+        // video
 
-                    testName,
 
-                    status
+        try {
+
+
+            Allure.addAttachment(
+
+                    "Video",
+
+                    Files.newInputStream(
+
+                            Paths.get(
+
+                                    "videos/"
+                                            + testName
+                                            + ".avi"
+                            )
+                    )
             );
 
 
+        } catch(Exception e){}
 
 
-            // csv
 
 
-            CSVUtil.create(
+        // pdf
 
-                    testName,
 
-                    status
+        try {
+
+
+            Allure.addAttachment(
+
+                    "PDF",
+
+                    Files.newInputStream(
+
+                            Paths.get(
+
+                                    "reports/"
+                                            + testName
+                                            + ".pdf"
+                            )
+                    )
             );
 
 
+        } catch(Exception e){}
 
 
-            // dashboard
-
-
-            DashboardWriter.addResult(
-
-                    result.isSuccess()
-            );
-
-
-
-        }
-
-        catch(Exception e){
-
-
-            e.printStackTrace();
-        }
-
-
-
-
-        // stop video
-
-
-        try{
-
-
-            VideoUtil.stopRecord();
-
-        }
-
-        catch(Exception e){
-
-
-            e.printStackTrace();
-        }
-
-
-
-
-        // close browser
 
 
         if(
@@ -261,14 +293,6 @@ public class BaseTest {
 
             driver.quit();
         }
-
-
-
-
-        System.out.println(
-
-                "Browser closed."
-        );
     }
 
 }
