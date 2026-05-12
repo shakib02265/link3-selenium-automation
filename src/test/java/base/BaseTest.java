@@ -53,14 +53,12 @@ public class BaseTest {
 
 
 
-        // auto detect browser version
+        // setup chromedriver
 
 
         WebDriverManager
 
                 .chromedriver()
-
-                .browserVersionDetection()
 
                 .setup();
 
@@ -73,7 +71,7 @@ public class BaseTest {
 
 
 
-        // CI safe options
+        // GitHub Actions safe
 
 
         options.addArguments(
@@ -118,7 +116,7 @@ public class BaseTest {
 
 
 
-        // start video
+        // start video recording
 
 
         VideoUtil.startRecord(
@@ -127,6 +125,9 @@ public class BaseTest {
         );
 
 
+
+
+        // open website
 
 
         driver.get(
