@@ -1,0 +1,86 @@
+name: Link3 Selenium Tests
+
+on:
+  push:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+
+
+jobs:
+
+  test:
+
+    runs-on: windows-latest
+
+
+
+    steps:
+
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+
+        with:
+          distribution: temurin
+          java-version: 17
+
+
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+
+
+
+      - name: Cache Maven
+        uses: actions/cache@v4
+
+        with:
+          path: ~/.m2
+          key: maven-cache
+
+
+
+      - name: Run tests
+        run: mvn clean test
+
+
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+
+        with:
+          name: screenshots
+          path: screenshots/
+
+
+
+      - name: Upload videos
+        uses: actions/upload-artifact@v4
+
+        with:
+          name: videos
+          path: videos/
+
+
+
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+
+        with:
+          name: reports
+          path: reports/
+
+
+
+      - name: Upload Allure Results
+        uses: actions/upload-artifact@v4
+
+        with:
+          name: allure-results
+          path: target/allure-results/
